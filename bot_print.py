@@ -7,6 +7,7 @@ def print_with_colors(string, color='white'):
         'red': '\033[91m',
         'green': '\033[92m',
         'yellow': '\033[93m',
+        'orange': '\033[33m',
         'blue': '\033[94m',
         'cyan': '\033[96m',
         'magenta': '\033[95m'
