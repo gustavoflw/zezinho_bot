@@ -36,6 +36,10 @@ class DiscordBot(discord.Client):
     async def on_message(self, message: discord.Message):
         print(f'- [ON_MESSAGE] {message.author} in {message.channel}: {message.content}', color='cyan')
 
+        if len(message.content) == 0:
+            print(f'- Empty message, ignoring...', color='cyan')
+            return
+
         mimicked_this_time = False
 
         first_char = message.content[0]

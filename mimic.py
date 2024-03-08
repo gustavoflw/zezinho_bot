@@ -90,7 +90,7 @@ class Mimic:
         print(f"- PROMPT:\n{prompt}", color='bold')
 
         message = ChatMessage(role="user", content=prompt)
-        chat_response = self.client.chat(model=self.model, messages=[message], max_tokens=150, temperature=0.7, top_p=0.9)
+        chat_response = self.client.chat(model=self.model, messages=[message], max_tokens=500, temperature=0.7, top_p=0.9)
         chat_response_content = chat_response.choices[0].message.content
         print(chat_response_content, color='green')
 
