@@ -114,23 +114,23 @@ class DiscordBot(discord.Client):
         if str(user_id) == str(self.bot_user_id):
             print(f'- Not mimicking myself, duhh', color='cyan')
             return
-
-        # print(f'- Mimicking target user id: {user_id}', color='cyan')
-        # mimic = Mimic(user_id, channel_id)
-        # tries = 0
-        # success = False
-        # while tries < 5:
-        #     try:
-        #         mimic_response = mimic.mimic()
-        #         success = True
-        #         await self.send_message_in_channel(mimic_response, channel_id)
-        #         break
-        #     except Exception as exception:
-        #         print(f'- [MIMIC FAILURE] {exception}', color='red')
-        #         tries += 1
-        #         sleep(5)
-        # if not success:
-        #     await self.send_message_in_channel('SOU MTO BURRO MANO!!!', channel_id)
+        
+        print(f'- Mimicking target user id: {user_id}', color='cyan')
+        mimic = Mimic(user_id, channel_id)
+        tries = 0
+        success = False
+        while tries < 5:
+            try:
+                mimic_response = mimic.mimic()
+                success = True
+                await self.send_message_in_channel(mimic_response, channel_id)
+                break
+            except Exception as exception:
+                print(f'- [MIMIC FAILURE] {exception}', color='red')
+                tries += 1
+                sleep(1)
+        if not success:
+            await self.send_message_in_channel('SOU MTO BURRO MANO!!!', channel_id)
 
     async def send_message_in_channel(self, message, channel_id):
         print(f'- Sending message in channel {channel_id} {message}', color='cyan')
