@@ -1,4 +1,5 @@
 import os
+import random
 import discord
 from time import sleep
 from datetime import datetime
@@ -30,8 +31,9 @@ class DiscordBot(discord.Client):
         channels = self.get_text_channels()
 
         for channel in channels:
-            if 'bot' in str(channel.name).lower():
+            if str(channel.name).lower() == 'bot_room':
                 await self.send_message_in_channel('pai ta on', channel.id)
+                break
 
     async def on_message(self, message: discord.Message):
         print(f'- [ON_MESSAGE] {message.author} in {message.channel}: {message.content}', color='cyan')
@@ -76,6 +78,15 @@ class DiscordBot(discord.Client):
             else:
                 await self.mimic_user(message.author.id, message.channel.id)
 
+        if not self.mimicking and message.author.id != self.bot_user_id and not mimicked_this_time:
+            probability = 1.0
+            if random.random() < probability:
+                print(f'- Random chance to mimic a user has been triggered', color='cyan')
+                message_history = MessageHistory(message.author.id, message.channel.id)
+                await self.mimic_user(message.author.id, message.channel.id, 10, 10)
+                self.t_mimic_start = datetime.now().timestamp()
+                self.mimicking = True
+
     async def on_play(self, to_play: str, text_channel: discord.TextChannel, user: discord.User):
         try:
             print(f'- Playing {to_play}', color='cyan')
@@ -110,13 +121,13 @@ class DiscordBot(discord.Client):
             print(f'- [ERROR] {exception}', color='red')
             await self.send_message_in_channel(f'deu algo errado, algum de nos ta burro', connected_voice_channel.channel.id)
 
-    async def mimic_user(self, user_id, channel_id):
+    async def mimic_user(self, user_id, channel_id, num_channel_last_messages=1, num_target_historic_messages=10):
         if str(user_id) == str(self.bot_user_id):
             print(f'- Not mimicking myself, duhh', color='cyan')
             return
         
         print(f'- Mimicking target user id: {user_id}', color='cyan')
-        mimic = Mimic(user_id, channel_id)
+        mimic = Mimic(user_id, channel_id, num_channel_last_messages, num_target_historic_messages)
         tries = 0
         success = False
         while tries < 5:
