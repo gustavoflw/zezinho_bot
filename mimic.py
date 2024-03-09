@@ -15,7 +15,7 @@ class Mimic:
         self.target_id = user_id # The user id of the target
         self.channel_id = channel_id # The channel id where the bot is going to interact
 
-        self.num_channel_last_messages = 1 # The number of messages from the channel that the bot will use to generate a response (including messages from all users since the bot was first triggered)
+        self.num_channel_last_messages = 10 # The number of messages from the channel that the bot will use to generate a response (including messages from all users since the bot was first triggered)
         self.num_target_historic_messages = 10 # The number of messages of the target that the bot will use to generate a response (only the messages from the target)
 
         self.message_history = MessageHistory(self.target_id, self.channel_id)
