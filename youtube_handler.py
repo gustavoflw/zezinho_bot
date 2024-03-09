@@ -34,7 +34,7 @@ class YoutubeHandler: # You can search for a video or pass directly an URL. This
         with youtube_dl.YoutubeDL(self.download_options) as ydl:
             info_dict = ydl.extract_info(url, download=False)
             file_path = ydl.prepare_filename(info_dict)
-            file_path = file_path.replace('.webm', '.mp3')
+            file_path = '.'.join(file_path.split('.')[:-1]) + '.mp3'
             if not os.path.exists(file_path):
                 print(f"- Downloading video to {file_path}", color='orange')
                 ydl.download([url])

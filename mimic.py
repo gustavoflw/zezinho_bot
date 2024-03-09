@@ -16,7 +16,7 @@ class Mimic:
         self.channel_id = channel_id # The channel id where the bot is going to interact
 
         self.num_channel_last_messages = 1 # The number of messages from the channel that the bot will use to generate a response (including messages from all users since the bot was first triggered)
-        self.num_target_historic_messages = 20 # The number of messages of the target that the bot will use to generate a response (only the messages from the target)
+        self.num_target_historic_messages = 10 # The number of messages of the target that the bot will use to generate a response (only the messages from the target)
 
         self.message_history = MessageHistory(self.target_id, self.channel_id)
 
@@ -27,7 +27,7 @@ class Mimic:
 
         load_dotenv()
 
-        self.model = 'open-mixtral-8x7b'   
+        self.model = os.getenv('MISTRAL_AI_MODEL')  
         self.client = MistralClient(api_key=os.getenv('MISTRAL_AI_API_KEY'))
 
     def question(self, question: str) -> str:
@@ -82,15 +82,13 @@ class Mimic:
 
         prompt = f"{self.context}\n\n{channel_msgs_formatted}"
         prompt = f"{prompt}\n\n{keywords}"
-        # prompt = f"{prompt}\n\n\n*** Não responda em mais de uma frase. Apenas baseie-se no estilo de escrita das frases do alvo."
-        # prompt = f"{prompt} Permito que voce use palavras que nao sejam as palavras-chave, para soar mais coesivo."
-        prompt = f"{prompt} Se esforce para nao repetir ideias no contexto da conversa."
-        # prompt = f"{prompt} Nao de oi ou tchau, nem pergunte como a pessoa esta, ou qualquer outra coisa que nao seja relevante."
+        prompt = f"{prompt}\n\n\n*** Não responda em mais de uma frase. Apenas baseie-se no estilo de escrita das frases do alvo."
+        prompt = f"{prompt} Se esforce para nao repetir ideias no contexto da conversa e responda em uma frase CURTA."
         prompt = f"{prompt} Responda em formato JSON com a chave 'response' e o valor sendo a resposta."
         print(f"- PROMPT:\n{prompt}", color='bold')
 
         message = ChatMessage(role="user", content=prompt)
-        chat_response = self.client.chat(model=self.model, messages=[message], max_tokens=500, temperature=0.7, top_p=0.9)
+        chat_response = self.client.chat(model=self.model, messages=[message], max_tokens=200, temperature=0.7, top_p=0.9)
         chat_response_content = chat_response.choices[0].message.content
         print(chat_response_content, color='green')
 
@@ -102,7 +100,7 @@ class Mimic:
     def parse_response_content(self, response_content: str) -> str:
         response_content = response_content.strip()
 
-        characters = ['\n', '\t', '\r', '\\' ]
+        characters = ['\n', '\t', '\r', '\\']
         for c in characters:
             response_content = response_content.replace(c, '')
 
