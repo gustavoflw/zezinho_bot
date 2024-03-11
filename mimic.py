@@ -129,7 +129,7 @@ class Mimic:
         else:
             response_content = 'sei la, to cansado'
 
-        response_content = re.sub(r'[^\w\sçà.,;!\?\-]', '', response_content).strip()
+        response_content = re.sub(r'[^\w\sçà.,:;!\?\-]', '', response_content).strip()
 
         return response_content
 
