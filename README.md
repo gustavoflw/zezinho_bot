@@ -1,11 +1,11 @@
-# Zezinho: um bot de discord
+# Zezinho: a discord bot
 
-### Crie variaveis no arquivo .env:
+### Define .env variables:
 - DISCORD_TOKEN
 - MISTRAL_AI_API_KEY
 
 
-### Para rodar o bot
+### How to run
 ```sh
 cd zezinho_bot/
 python -m virtualenv .venv
